@@ -1,6 +1,7 @@
-[//]: # (https://stackoverflow.com/questions/73839865/envoy-proxy-external-authorization-with-sub-path)
+## External Authorization with Envoy Proxy and NestJS
+We will demonstrate how to set up external authorization using Envoy Proxy and NestJS, ensuring robust access control in a microservices environment. By integrating Envoy with an external AuthService, we can create a secure and scalable system that checks user permissions and roles before allowing access to sensitive operation
 
-
+Full article: [External Authorization with Envoy Proxy and NestJS](https://kelvinbz.medium.com/implementing-external-authorization-with-envoy-proxy-and-nestjs-3898752683f3)
 ## Request Flow
 ```mermaid
 sequenceDiagram
