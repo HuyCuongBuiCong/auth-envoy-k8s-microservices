@@ -1,0 +1,37 @@
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTcxNzUxOTc3NSwiZXhwIjoxNzE3NTIzMzc1fQ.nYFnb-6p4D1-9_JGM6Ww70ohKxwolvGusk1Oui-iwVA
+
+### Login with Admin
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "john",
+  "password": "changeme"
+}
+
+### Login with User
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "maria",
+  "password": "guess"
+}
+
+
+### Get Orders
+GET http://localhost:3000/v1/orders
+Authorization: Bearer {{token}}
+
+### Delete Order
+DELETE http://localhost:3000/v1/orders/1
+Authorization: Bearer {{token}}
+
+
+### Get Products
+GET http://localhost:3000/v1/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTcxNzQzNTY1OCwiZXhwIjoxNzE3NDM5MjU4fQ.fJO02fvC5OHWRHYkcz3BZhK140Y-V4Odsk2dliazxBc
+
+
+###
+

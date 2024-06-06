@@ -1,0 +1,19 @@
+{
+  "name": "create-nestjs-helm-template",
+  "version": "1.0.0",
+  "description": "To create nestjs with helm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-service": "node create-service.js",
+    "h": "node add-helm.js product",
+    "cb": "node cb.js",
+    "deploy": "node deploy.js"
+  },
+  "author": "kelvinbz",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "axios-retry": "^4.3.0"
+  }
+}
