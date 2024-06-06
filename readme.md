@@ -3,18 +3,22 @@
 
 ## Request Flow
 ```mermaid
-graph LR
-    Client -->|"1. GET /order (with JWT)"| Envoy
-Envoy -->|"2. GET /auth/ext-authz (with JWT)"| AuthService
-AuthService -->|"4. Return x-user-id and x-user-permissions headers or error"| Envoy
-Envoy -->|"5. Forward request with x-user-id and x-user-permissions headers"| OrderService
-OrderService -->|"6. Process and return order details for user ID or error"| Envoy
-Envoy -->|"7. Forward order details or error"| Client
+sequenceDiagram
+    participant Client
+    participant Envoy
+    participant AuthService
+    participant OrderService
 
-style Client fill:#f9f,stroke:#333,stroke-width:4px;
-style Envoy fill:#bbf,stroke:#333,stroke-width:4px;
-style AuthService fill:#bfb,stroke:#333,stroke-width:4px;
-style OrderService fill:#fbb,stroke:#333,stroke-width:4px;
+    Client->>Envoy: 1. POST /auth/login (with credentials)
+    Envoy->>AuthService: 2. Forward login request
+    AuthService->>Envoy: 3. Return JWT
+    Envoy->>Client: 4. Forward JWT
+    Client->>Envoy: 5. GET /order (with JWT)
+    Envoy->>AuthService: 6. GET /auth/ext-authz (with JWT)
+    AuthService->>Envoy: 7. Return x-user-id and x-user-permissions headers or error
+    Envoy->>OrderService: 8. Forward request with x-user-id and x-user-permissions headers
+    OrderService->>Envoy: 9. Process and return order details for user ID or error
+    Envoy->>Client: 10. Forward order details or error
 
 ```
 
@@ -99,6 +103,7 @@ private async initUsers() {
 ```
 #### ROLE AND PERMISSIONS
 ```ts
+// auth/src/auth/roles-permissions.ts
 export enum Permission {
   CREATE_ORDER = 'create_order',
   READ_ORDER = 'read_order',
@@ -180,15 +185,16 @@ sequenceDiagram
     participant OrderService
 
     Client->>Envoy: 1. DELETE /v1/orders/123 (with JWT)
-    Envoy->>AuthService: 2. GET /auth/ext-authz
-    AuthService->>Envoy: 3. Authorization response with x-user-id, x-user-roles, x-user-permissions
-    alt Admin Role
+    Envoy->>AuthService: 2. GET /auth/ext-authz (with JWT)
+    AuthService->>Envoy: 3. Authorization response with x-user-id and x-user-permissions
+    alt Has delete_order Permission
         Envoy->>OrderService: 4. Forward request with headers
         OrderService->>Envoy: 5. Order deleted successfully
         Envoy->>Client: 6. Return success response
-    else User Role
+    else Lacks delete_order Permission
         Envoy->>Client: 4. Return forbidden response
     end
+
 ```
 
 

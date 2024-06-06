@@ -41,12 +41,4 @@ export class UsersService {
     return this.users.find((user) => user.userId === userId);
   }
 
-  async assignRoles(userId: number, roles: Role[]): Promise<any> {
-    const user = this.users.find((user) => user.userId === userId);
-    if (user) {
-      user.roles = roles;
-      return user;
-    }
-    return null;
-  }
 }
