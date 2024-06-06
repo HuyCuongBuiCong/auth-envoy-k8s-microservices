@@ -133,39 +133,38 @@ export const RolesPermissions = {
 
 ```ts
 // auth/src/auth/auth.controller.ts
-@Get('ext-authz/*')
-  async authz(
+@All('ext-authz/*')
+async authz(
     @Headers('authorization') authHeader: string,
-    @Res() res: Response,
-  ) {
+@Res() res: Response,
+) {
     console.log('entered authz');
     if (!authHeader) {
-      return res.status(401).send('Authorization header missing');
+        return res.status(401).send('Authorization header missing');
     }
 
     const token = authHeader.split(' ')[1];
     if (!token) {
-      return res.status(401).send('Token missing');
+        return res.status(401).send('Token missing');
     }
 
     try {
-      const decoded = this.jwtService.verify(token);
-      const userId = decoded.sub; // Assuming 'sub' contains the user ID
-      const user = await this.usersService.findById(userId);
-      const roles = user.roles.join(',');
-      const permissions = user.roles
-        .flatMap((role) => RolesPermissions[role as Role])
-        .join(',');
+        const decoded = this.jwtService.verify(token);
+        const userId = decoded.sub; // Assuming 'sub' contains the user ID
+        const user = await this.usersService.findById(userId);
+        const roles = user.roles.join(',');
+        const permissions = user.roles
+            .flatMap((role) => RolesPermissions[role as Role])
+            .join(',');
 
-      res.setHeader('x-user-id', userId);
-      res.setHeader('x-user-roles', roles);
-      res.setHeader('x-user-permissions', permissions);
-
-      return res.status(200).send('Authorized');
+        res.setHeader('x-user-id', userId);
+        res.setHeader('x-user-roles', roles);
+        res.setHeader('x-user-permissions', permissions);
+        res.end();
     } catch (err) {
-      return res.status(401).send('Invalid token');
+        return res.status(401).send('Invalid token');
     }
-  }
+}
 ```
 
 ### Order Service
