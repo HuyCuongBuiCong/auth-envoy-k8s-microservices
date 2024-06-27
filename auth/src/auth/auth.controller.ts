@@ -7,7 +7,8 @@ import {
   Headers,
   Res,
   Logger,
-  Body, All,
+  Body,
+  All,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';

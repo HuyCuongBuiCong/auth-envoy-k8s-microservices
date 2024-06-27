@@ -2,6 +2,47 @@
 We will demonstrate how to set up external authorization using Envoy Proxy and NestJS, ensuring robust access control in a microservices environment. By integrating Envoy with an external AuthService, we can create a secure and scalable system that checks user permissions and roles before allowing access to sensitive operation
 
 Full article: [External Authorization with Envoy Proxy and NestJS](https://kelvinbz.medium.com/implementing-external-authorization-with-envoy-proxy-and-nestjs-3898752683f3)
+```mermaid
+graph LR
+    User["User"] -- "HTTP Request" --> EnvoyProxy["Envoy Proxy"]
+style User fill:#f9d423,stroke:#ff6600,stroke-width:2px
+style EnvoyProxy fill:#8ec6c5,stroke:#2a9d8f,stroke-width:2px
+
+EnvoyProxy -- "Forward Authorization Request" --> AuthService["Auth Service (NestJS)"]
+AuthService -- "Authorization Decision (Allow/Deny)" --> EnvoyProxy
+style AuthService fill:#ffcccb,stroke:#ff4444,stroke-width:2px
+
+subgraph headers1["allowed header"]
+x-user-id(["x-user-id"])
+x-user-permissions([" x-user-permissions"])
+end
+
+subgraph headers2["allowed header"]
+x-user-id1(["x-user-id"])
+x-user-permissions2([" x-user-permissions"])
+end
+
+
+subgraph k8s
+EnvoyProxy -- "HTTP Request (If Allowed)" --> headers1 --> Microservice1["Microservice 1 (NestJS)"]
+EnvoyProxy -- "HTTP Request (If Allowed)" --> headers2 --> Microservice2["Microservice 2 (NestJS)"]
+style Microservice1 fill:#d4a5a5,stroke:#a64d79,stroke-width:2px
+style Microservice2 fill:#c9e4de,stroke:#0a9396,stroke-width:2px
+
+subgraph "Backend Services"
+Microservice1["Microservice 1 (NestJS)"]
+Microservice2["Microservice 2 (NestJS)"]
+end
+
+subgraph "Authorization Logic"
+AuthService --> RolesPermissions["User Roles & Permissions"]
+RolesPermissions --> AuthService
+style RolesPermissions fill:#faf3dd,stroke:#f9c74f,stroke-width:2px
+end
+end
+
+```
+
 ## Request Flow
 ```mermaid
 sequenceDiagram

@@ -40,5 +40,4 @@ export class UsersService {
   async findById(userId: number): Promise<any | undefined> {
     return this.users.find((user) => user.userId === userId);
   }
-
 }
